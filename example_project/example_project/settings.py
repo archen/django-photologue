@@ -108,3 +108,4 @@ INSTALLED_APPS = [
 
 SOUTH_TESTS_MIGRATE = False
 
+IMAGEKIT_DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
