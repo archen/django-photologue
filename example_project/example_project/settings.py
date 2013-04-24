@@ -22,6 +22,8 @@ DATABASES = {
 
 TIME_ZONE = 'UTC'
 
+
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-gb'
@@ -89,6 +91,12 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 FIXTURE_DIRS = (
     os.path.join(TOP_FOLDER, 'example_project/fixtures'),
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 INSTALLED_APPS = [
     'django.contrib.auth',
