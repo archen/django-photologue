@@ -334,6 +334,8 @@ class ImageModel(models.Model):
 
         if not self.size_exists(photosize):
             self.create_size(photosize)
+
+        generator = PhotologueSpec(photo=self, photosize=photosize)
         return Image.open(self._get_SIZE_filename(size)).size
 
     def _get_SIZE_url(self, size):
@@ -342,16 +344,14 @@ class ImageModel(models.Model):
             self.create_size(photosize)
         if photosize.increment_count:
             self.increment_count()
-        cache = self.get_cached_file(photosize)
-        try:
-            return cache.url
-        except IOError:
-            return NOT_FOUND_IMAGE_URL
+        generator = PhotologueSpec(photo=self, photosize=photosize)
+        return settings.MEDIA_URL + generator.cachefile_name
 
     def _get_SIZE_filename(self, size):
         photosize = PhotoSizeCache().sizes.get(size)
-        cache = self.get_cached_file(photosize)
-        return os.path.join(settings.MEDIA_ROOT, cache.generator.cachefile_name)
+        generator = PhotologueSpec(photo=self, photosize=photosize)
+
+        return os.path.join(settings.MEDIA_ROOT, generator.cachefile_name)
 
     def increment_count(self):
         self.view_count += 1
@@ -369,25 +369,13 @@ class ImageModel(models.Model):
                     curry(self._get_SIZE_filename, size=size))
 
     def size_exists(self, photosize):
-        func = getattr(self, "get_%s_filename" % photosize.name, None)
-        try:
-            return self.image.storage.exists(func())
-        except IOError:
-            return False
-
-
-
-    def get_cached_file(self, photosize):
         generator = PhotologueSpec(photo=self, photosize=photosize)
-        cache = ImageCacheFile(generator)
-        return cache
+        return self.image.storage.exists(generator.cachefile_name)
 
     def create_size(self, photosize):
-        cache = self.get_cached_file(photosize)
-        try:
-            cache.generate()
-        except IOError, e:
-            logger.error(e)
+        generator = PhotologueSpec(photo=self, photosize=photosize)
+        cache = ImageCacheFile(generator)
+        cache.generate()
 
 
     def remove_size(self, photosize, remove_dirs=True):
