@@ -101,6 +101,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.sitemaps',
     'photologue',
     'example_project',
     'south',
