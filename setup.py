@@ -38,11 +38,11 @@ setup(
         'Django>=1.4', # Timezone support means 1.4 minimum.
         'South>=0.7.5', # Might work with earlier versions, but not tested.
         'Pillow==1.7.8', # Might work with earlier versions, but not tested. YMMV. Note that 2.0.0 needed for Mac users.
-        'pilkit==0.1.5-dev',
+        'pilkit==0.1.6',
         'django-imagekit==3.0b1',
     ],
     dependency_links = [
-        'https://github.com/petry/pilkit/tarball/master#egg=pilkit-0.1.5-dev',
+        'https://github.com/petry/pilkit/tarball/master#egg=pilkit-0.1.6',
         'https://github.com/jdriscoll/django-imagekit/tarball/develop#egg=django-imagekit-3.0b1'
     ]
 
