@@ -93,7 +93,8 @@ class PhotologueSpec(ImageSpec):
                 width=photosize.width,
                 height=photosize.height,
                 anchor=imagekit_anchor,
-                crop=photosize.crop
+                crop=photosize.crop,
+                upscale=photosize.upscale
             )
         )
 

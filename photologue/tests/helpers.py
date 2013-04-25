@@ -34,7 +34,7 @@ class PhotologueBaseTest(TestCase):
     def setUp(self):
         self.s = PhotoSize(name='testPhotoSize', width=100, height=100)
         self.s.save()
-        self.pl = _create_new_photo(name='Landscape', slug='landscape')
+        self. pl = _create_new_photo(name='Landscape', slug='landscape')
 
     def tearDown(self):
         self.pl.delete()

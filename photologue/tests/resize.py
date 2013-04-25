@@ -107,9 +107,10 @@ class ImageResizeTest(PhotologueBaseTest):
         self.s.save()
         self.assertEqual(self.pl.get_testPhotoSize_size(), (100, 75))
 
-    def test_resize_no_upscale_crop(self):
+    def test_resize_upscale_crop(self):
         self.s.size = (1000, 1000)
         self.s.crop = True
+        self.s.upscale = True
         self.s.save()
         self.assertEqual(self.pl.get_testPhotoSize_size(), (1000, 1000))
 
