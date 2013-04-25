@@ -94,7 +94,6 @@ class PhotoTest(PhotologueBaseTest):
 
         generator = PhotologueSpec(photo=self.pl2, photosize=self.s)
         cache = ImageCacheFile(generator)
-
         self.assertEqual(self.pl2.get_testPhotoSize_url(),
                          cache.url)
 

@@ -1,6 +1,7 @@
 import sys
 import os
 import random
+import urlparse
 import zipfile
 import logging
 
@@ -344,13 +345,14 @@ class ImageModel(models.Model):
         if photosize.increment_count:
             self.increment_count()
         generator = PhotologueSpec(photo=self, photosize=photosize)
-        return settings.MEDIA_URL + generator.cachefile_name
+        image_url = urlparse.urljoin(settings.MEDIA_URL, generator.cachefile_name)
+        return filepath_to_uri(image_url)
 
     def _get_SIZE_filename(self, size):
         photosize = PhotoSizeCache().sizes.get(size)
         generator = PhotologueSpec(photo=self, photosize=photosize)
-
         return os.path.join(settings.MEDIA_ROOT, generator.cachefile_name)
+
 
     def increment_count(self):
         self.view_count += 1
