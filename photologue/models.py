@@ -22,7 +22,7 @@ try:
 except ImportError:
     # Django < 1.4.2
     from django.utils.encoding import force_unicode as force_text
-from django.utils.encoding import smart_str, filepath_to_uri
+from django.utils.encoding import smart_str
 from django.utils.functional import curry
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
@@ -347,7 +347,7 @@ class ImageModel(models.Model):
             self.increment_count()
         generator = PhotologueSpec(photo=self, photosize=photosize)
         image_url = urlparse.urljoin(settings.MEDIA_URL, generator.cachefile_name)
-        return filepath_to_uri(image_url)
+        return image_url
 
     def _get_SIZE_filename(self, size):
         photosize = PhotoSizeCache().sizes.get(size)

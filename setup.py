@@ -42,7 +42,6 @@ setup(
         'django-imagekit==3.0b1',
     ],
     dependency_links = [
-        'https://github.com/petry/pilkit/tarball/master#egg=pilkit-0.1.6',
         'https://github.com/jdriscoll/django-imagekit/tarball/develop#egg=django-imagekit-3.0b1'
     ]
 
