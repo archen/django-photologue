@@ -111,6 +111,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'photologue',
     'south',
+    'imagekit',
     'example_project',
 ]
 
