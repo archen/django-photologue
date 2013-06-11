@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.sitemaps',
     'photologue',
+    'imagekit',
     'example_project',
     'south',
 ]
