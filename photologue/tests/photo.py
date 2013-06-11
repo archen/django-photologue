@@ -6,6 +6,8 @@ from photologue.models import Image, Photo, PHOTOLOGUE_DIR
 from photologue.processors import PhotologueSpec
 from photologue.tests.helpers import LANDSCAPE_IMAGE_PATH, PhotologueBaseTest, \
 QUOTING_IMAGE_PATH
+from unittest import skip
+
 
 class PhotoTest(PhotologueBaseTest):
     def tearDown(self):

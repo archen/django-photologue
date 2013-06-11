@@ -24,7 +24,7 @@ try:
 except ImportError:
     # Django < 1.4.2
     from django.utils.encoding import force_unicode as force_text
-from django.utils.encoding import smart_str, filepath_to_uri
+from django.utils.encoding import smart_str
 from django.utils.functional import curry
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
