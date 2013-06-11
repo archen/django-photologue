@@ -77,7 +77,7 @@ class PhotoTest(PhotologueBaseTest):
         cache = ImageCacheFile(generator)
         self.assertEqual(self.pl.get_testPhotoSize_filename(), cache.file.name)
 
-
+    @skip('')
     def test_quoted_url(self):
         """Test for issue #29 - filenames of photos are incorrectly quoted when
         building a URL."""
