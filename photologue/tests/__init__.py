@@ -1,3 +1,4 @@
+from photologue.tests.admin_site import *
 from photologue.tests.effect import *
 from photologue.tests.gallery import *
 from photologue.tests.photo import *
