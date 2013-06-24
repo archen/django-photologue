@@ -12,7 +12,7 @@ install:
   - pip install django==$DJANGO_VERSION
   - python setup.py develop
 
-script: cd example_project; coverage run --source='photologue' manage.py test photologue
+script: coverage run manage.py test photologue
 
 after_success:
-  - cd example_project; coveralls
+  - coveralls
