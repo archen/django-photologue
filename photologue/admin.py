@@ -1,4 +1,6 @@
+from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.http import HttpResponsePermanentRedirect
 from .models import *
 
 class GalleryAdmin(admin.ModelAdmin):
@@ -14,6 +16,38 @@ class PhotoAdmin(admin.ModelAdmin):
     search_fields = ['title', 'title_slug', 'caption']
     list_per_page = 10
     prepopulated_fields = {'title_slug': ('title',)}
+
+    fieldsets = (
+        (None, {
+            'fields': ('image', 'title', 'crop_from', 'caption')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('title_slug', 'effect', 'date_added', 'is_public', 'tags')
+        }),
+    )
+
+    def get_urls(self):
+        urls = super(PhotoAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^(?P<object_id>[0-9]+)/size/(?P<size>[\-\d\w]+)/$',
+             self.admin_site.admin_view(self.photo_size_view),
+             name='photologue-photo-size'
+            )
+        )
+        return my_urls + urls
+
+    def photo_size_view(self, request, object_id, size):
+        obj = self.model.objects.get(id=object_id)
+        return HttpResponsePermanentRedirect(obj._get_SIZE_url(size))
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        sizes = PhotoSize.objects.all()
+        extra_context = {'sizes': sizes}
+        return super(PhotoAdmin, self).change_view(request, object_id, form_url,
+                                                   extra_context)
+
 
 class PhotoEffectAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'color', 'brightness', 'contrast', 'sharpness', 'filters', 'admin_sample')
