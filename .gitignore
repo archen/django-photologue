@@ -3,3 +3,5 @@
 django_photologue.egg-info
 build
 .idea
+example_project/.coverage
+example_project/htmlcov/

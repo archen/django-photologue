@@ -1,7 +1,6 @@
 language: python
 
 python:
-  - 2.6
   - 2.7
   - 3.3
 
@@ -16,8 +15,11 @@ matrix:
 
 
 install:
+  - pip install -e requirements_dev.txt
   - pip install django==$DJANGO_VERSION
   - python setup.py develop
 
-script: cd example_project; python manage.py test photologue
+script: cd example_project; coverage run --source='photologue' manage.py test photologue
 
+after_success:
+  - cd example_project; coveralls
