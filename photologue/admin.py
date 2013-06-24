@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 from django.contrib import admin
 from django.http import HttpResponsePermanentRedirect
+from django.utils.translation import ugettext_lazy as _
 from .models import *
 
 class GalleryAdmin(admin.ModelAdmin):
@@ -21,7 +22,7 @@ class PhotoAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('image', 'title', 'crop_from', 'caption')
         }),
-        ('Advanced options', {
+        (_('Advanced options'), {
             'classes': ('collapse',),
             'fields': ('title_slug', 'effect', 'date_added', 'is_public', 'tags')
         }),
@@ -55,16 +56,16 @@ class PhotoEffectAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('name', 'description')
         }),
-        ('Adjustments', {
+        (_('Adjustments'), {
             'fields': ('color', 'brightness', 'contrast', 'sharpness')
         }),
-        ('Filters', {
+        (_('Filters'), {
             'fields': ('filters',)
         }),
-        ('Reflection', {
+        (_('Reflection'), {
             'fields': ('reflection_size', 'reflection_strength', 'background_color')
         }),
-        ('Transpose', {
+        (_('Transpose'), {
             'fields': ('transpose_method',)
         }),
     )
@@ -75,10 +76,10 @@ class PhotoSizeAdmin(admin.ModelAdmin):
         (None, {
             'fields': ('name', 'width', 'height', 'quality')
         }),
-        ('Options', {
+        (_('Options'), {
             'fields': ('upscale', 'crop', 'pre_cache', 'increment_count')
         }),
-        ('Enhancements', {
+        (_('Enhancements'), {
             'fields': ('effect', 'watermark',)
         }),
     )
