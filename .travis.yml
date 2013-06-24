@@ -15,7 +15,7 @@ matrix:
 
 
 install:
-  - pip install -e requirements_dev.txt
+  - pip install -e requirements_test.txt
   - pip install django==$DJANGO_VERSION
   - python setup.py develop
 
