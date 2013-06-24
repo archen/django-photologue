@@ -18,9 +18,20 @@ Support
 If you have any questions or need help with any aspect of Photologue then please `join our mailing list
 <http://groups.google.com/group/django-photologue>`_.
 
-Travis CI status
+Project Status
 ----------------
-.. image:: https://secure.travis-ci.org/jdriscoll/django-photologue.png?branch=master
+.. image:: https://travis-ci.org/petry/django-photologue.png?branch=master
+    :target: https://travis-ci.org/petry/django-photologue
+    :alt: CI status on Travis CI
+
+.. image:: https://codeq.io/github/petry/django-photologue/badges/master.png
+    :target: https://codeq.io/github/petry/django-photologue/branches/master
+    :alt: Quality score on Codeq
+
+.. image:: https://coveralls.io/repos/petry/django-photologue/badge.png?branch=master 
+    :target: https://coveralls.io/r/petry/django-photologue
+    :alt: Coverage Status
+
 
 We use Travis to check that the unit test suite is working against various combinations
 of Python, Django, etc... `Click here for the full report <http://travis-ci.org/#!/jdriscoll/django-photologue>`_.
