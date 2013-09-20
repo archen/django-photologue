@@ -20,13 +20,13 @@ First, set up your template configuration as so::
         'django.template.loaders.app_directories.Loader',
     )
 
-    from photologue import PHOTOLOGUE_TEMPLATE_DIR
+    from photologue import PHOTOLOGUE_APP_DIR
     TEMPLATE_DIRS = (
         ...other template folders...,
-        PHOTOLOGUE_TEMPLATE_DIR
+        PHOTOLOGUE_APP_DIR
     )
 
-The ``PHOTOLOGUE_TEMPLATE_DIR`` points to the directory above Photologue's normal
+The ``PHOTOLOGUE_APP_DIR`` points to the directory above Photologue's normal
 templates directory.  This means that ``path/to/photologue/template.html`` can also
 be reached via ``templates/path/to/photologue/template.html``.
 
@@ -38,6 +38,17 @@ For example, to customise ``photologue/gallery_list.html``, you can have an impl
     ... we are now extending the built-in gallery_list.html and we can override
     the content blocks that we want to customise ...
 
+
+Settings
+--------
+Photologue has several settings to customise behaviour; at present this part of the
+documentation is unfortunately incomplete.
+
+PHOTOLOGUE_USE_CKEDITOR
+~~~~~~~~~~~~~~~~~~~~~~~
+If you have already installed `django-ckeditor <https://pypi.python.org/pypi/django-ckeditor>`_
+then you can use to edit the TextArea fields of Gallery
+and Photo in the admin. Simply set the setting to ``True``. 
 
 Third-party contributions
 -------------------------
@@ -51,10 +62,10 @@ Replaces the normal templates with a new set that work well with `Bootstrap <htt
 To use these, edit your ``TEMPLATE_DIRS`` setting::
 
 
-    from photologue import PHOTOLOGUE_TEMPLATE_DIR
+    from photologue import PHOTOLOGUE_APP_DIR
     TEMPLATE_DIRS = (
         ...
-        os.path.join(PHOTOLOGUE_TEMPLATE_DIR, 'contrib/bootstrap/templates'),
+        os.path.join(PHOTOLOGUE_APP_DIR, 'contrib/bootstrap/templates'),
         ... other folders containing Photologue templates should come after...
     )
 
