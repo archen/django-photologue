@@ -2,11 +2,11 @@ import os
 from django.conf import settings
 from django.core.files.base import ContentFile
 from imagekit.cachefiles import ImageCacheFile
+from django.utils.unittest.case import skip
 from photologue.models import Image, Photo, PHOTOLOGUE_DIR
 from photologue.processors import PhotologueSpec
 from photologue.tests.helpers import LANDSCAPE_IMAGE_PATH, PhotologueBaseTest, \
 QUOTING_IMAGE_PATH
-from unittest import skip
 
 
 class PhotoTest(PhotologueBaseTest):
