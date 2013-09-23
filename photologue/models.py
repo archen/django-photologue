@@ -231,58 +231,56 @@ class GalleryUpload(models.Model):
         return gallery
 
     def process_zipfile(self):
-        if os.path.isfile(self.zip_file.path):
-            # TODO: implement try-except here
-            zip = zipfile.ZipFile(self.zip_file.path)
-            bad_file = zip.testzip()
-            if bad_file:
-                raise Exception('"%s" in the .zip archive is corrupt.' % bad_file)
-            count = 1
-            if self.gallery:
-                gallery = self.gallery
-            else:
-                gallery = Gallery.objects.create(title=self.title,
-                                                 title_slug=slugify(self.title),
-                                                 description=self.description,
-                                                 is_public=self.is_public,
-                                                 tags=self.tags)
-            from cStringIO import StringIO
-            for filename in sorted(zip.namelist()):
-                if filename.startswith('__'): # do not process meta files
+        zip = zipfile.ZipFile(self.zip_file)
+        bad_file = zip.testzip()
+        if bad_file:
+            raise Exception('"%s" in the .zip archive is corrupt.' % bad_file)
+        count = 1
+        if self.gallery:
+            gallery = self.gallery
+        else:
+            gallery = Gallery.objects.create(title=self.title,
+                                             title_slug=slugify(self.title),
+                                             description=self.description,
+                                             is_public=self.is_public,
+                                             tags=self.tags)
+        from cStringIO import StringIO
+        for filename in sorted(zip.namelist()):
+            if filename.startswith('__'): # do not process meta files
+                continue
+            data = zip.read(filename)
+            if len(data):
+                try:
+                    # the following is taken from django.newforms.fields.ImageField:
+                    #  load() is the only method that can spot a truncated JPEG,
+                    #  but it cannot be called sanely after verify()
+                    trial_image = Image.open(StringIO(data))
+                    trial_image.load()
+                    # verify() is the only method that can spot a corrupt PNG,
+                    #  but it must be called immediately after the constructor
+                    trial_image = Image.open(StringIO(data))
+                    trial_image.verify()
+                except Exception:
+                    # if a "bad" file is found we just skip it.
                     continue
-                data = zip.read(filename)
-                if len(data):
+                while 1:
+                    title = ' '.join([self.title, str(count)])
+                    slug = slugify(title)
                     try:
-                        # the following is taken from django.newforms.fields.ImageField:
-                        #  load() is the only method that can spot a truncated JPEG,
-                        #  but it cannot be called sanely after verify()
-                        trial_image = Image.open(StringIO(data))
-                        trial_image.load()
-                        # verify() is the only method that can spot a corrupt PNG,
-                        #  but it must be called immediately after the constructor
-                        trial_image = Image.open(StringIO(data))
-                        trial_image.verify()
-                    except Exception:
-                        # if a "bad" file is found we just skip it.
-                        continue
-                    while 1:
-                        title = ' '.join([self.title, str(count)])
-                        slug = slugify(title)
-                        try:
-                            Photo.objects.get(title_slug=slug)
-                        except Photo.DoesNotExist:
-                            photo = Photo(title=title,
-                                          title_slug=slug,
-                                          caption=self.caption,
-                                          is_public=self.is_public,
-                                          tags=self.tags)
-                            photo.image.save(filename, ContentFile(data))
-                            gallery.photos.add(photo)
-                            count = count + 1
-                            break
+                        Photo.objects.get(title_slug=slug)
+                    except Photo.DoesNotExist:
+                        photo = Photo(title=title,
+                                      title_slug=slug,
+                                      caption=self.caption,
+                                      is_public=self.is_public,
+                                      tags=self.tags)
+                        photo.image.save(filename, ContentFile(data))
+                        gallery.photos.add(photo)
                         count = count + 1
-            zip.close()
-            return gallery
+                        break
+                    count = count + 1
+        zip.close()
+        return gallery
 
 
 class ImageModel(models.Model):
