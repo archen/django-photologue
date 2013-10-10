@@ -10,7 +10,7 @@
 <div class="results">
     {% for c in cl.result_list %}
     <div class="photo module">
-        <a href="{{ c.pk }}">
+        <a href="{{ c.pk }}/">
             <img src="{{ c.get_admin_thumbnail_url }}" alt="{{ c.title }}"/>
         </a>
 
