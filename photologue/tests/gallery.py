@@ -1,13 +1,15 @@
-from photologue import models
-from photologue.tests import helpers
+from .. import models
+from .helpers import PhotologueBaseTest
+from .factories import GalleryFactory, PhotoFactory
 
-class GalleryTest(helpers.PhotologueBaseTest):
+
+class GalleryTest(PhotologueBaseTest):
 
     def setUp(self):
         """Create a test gallery with 2 photos."""
         super(GalleryTest, self).setUp()
-        self.test_gallery = models.Gallery.objects.create(title='Fake Gallery', title_slug='fake-gallery')
-        self.pl2 = helpers._create_new_photo(name='Landscape2', slug='landscape2')
+        self.test_gallery = GalleryFactory()
+        self.pl2 = PhotoFactory()
         self.test_gallery.photos.add(self.pl)
         self.test_gallery.photos.add(self.pl2)
 
@@ -59,4 +61,3 @@ class GalleryTest(helpers.PhotologueBaseTest):
         self.assertEqual(len(self.test_gallery.sample()), 1)
 
         models.SAMPLE_SIZE = _current_sample_size
-

@@ -1,82 +1,90 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from datetime import datetime
-from django.core.urlresolvers import reverse
-from photologue.tests import helpers
-from photologue.models import Gallery
 from django.test import TestCase
+from .factories import GalleryFactory
 
-YEAR = datetime.now().year
-MONTH = datetime.now().ctime().split(' ')[1].lower()
-DAY = datetime.now().day
 
 class RequestGalleryTest(TestCase):
 
+    urls = 'photologue.tests.test_urls'
+
     def setUp(self):
         super(RequestGalleryTest, self).setUp()
-        self.gallery = helpers._create_new_gallery(
-            name='Fake Gallery', slug='fake-gallery')
-
-    def tearDown(self):
-        super(RequestGalleryTest, self).tearDown()
-        self.gallery.delete()
+        self.gallery = GalleryFactory(title_slug='test-gallery')
 
     def test_archive_gallery_url_works(self):
-        response = self.client.get(reverse('pl-gallery-archive'))
+        response = self.client.get('/ptests/gallery/')
         self.assertEqual(response.status_code, 200)
 
     def test_archive_gallery_empty(self):
         """If there are no galleries to show, tell the visitor - don't show a
         404."""
 
-        Gallery.objects.all().update(is_public=False)
+        self.gallery.is_public = False
+        self.gallery.save()
 
-        response = self.client.get(reverse('pl-gallery-archive'))
+        response = self.client.get('/ptests/gallery/')
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(response.context['latest'].count(),
                          0)
 
     def test_paginated_gallery_url_works(self):
-        response = self.client.get(reverse('pl-gallery-list',
-                                            kwargs={'page': 1}))
+        response = self.client.get('/ptests/gallery/page/1/')
         self.assertEqual(response.status_code, 200)
 
     def test_gallery_works(self):
-        response = self.client.get(reverse('pl-gallery',
-                                           kwargs={'slug': 'fake-gallery'}))
+        response = self.client.get('/ptests/gallery/test-gallery/')
         self.assertEqual(response.status_code, 200)
 
     def test_archive_year_gallery_works(self):
-        response = self.client.get(reverse('pl-gallery-archive-year',
-                                           kwargs={'year': YEAR}))
+        response = self.client.get('/ptests/gallery/2011/')
         self.assertEqual(response.status_code, 200)
 
     def test_archive_month_gallery_works(self):
-        response = self.client.get(reverse('pl-gallery-archive-month',
-                                           kwargs={'year': YEAR, 'month':MONTH}
-                                           ))
+        response = self.client.get('/ptests/gallery/2011/dec/')
         self.assertEqual(response.status_code, 200)
 
     def test_archive_day_gallery_works(self):
-        response = self.client.get(reverse('pl-gallery-archive-day',
-                                           kwargs={'year': YEAR,
-                                                   'month':MONTH,
-                                                   'day': DAY}))
+        response = self.client.get('/ptests/gallery/2011/dec/23/')
         self.assertEqual(response.status_code, 200)
 
     def test_detail_gallery_works(self):
-        response = self.client.get(reverse('pl-gallery-detail',
-                                           kwargs={'year': YEAR,
-                                                   'month':MONTH,
-                                                   'day': DAY,
-                                                   'slug': 'fake-gallery'}))
+        response = self.client.get('/ptests/gallery/2011/dec/23/test-gallery/')
         self.assertEqual(response.status_code, 200)
 
     def test_redirect_to_list(self):
         """Trivial test - if someone requests the root url of the app
-        (i.e. /photologue/'), redirect them to the gallery list page."""
-        response = self.client.get(reverse('pl-photologue-root'))
-        self.assertRedirects(response, reverse('pl-gallery-archive'), 301, 200)
+        (i.e. /ptests/'), redirect them to the gallery list page."""
+        response = self.client.get('/ptests/')
+        self.assertRedirects(response, '/ptests/gallery/', 301, 200)
 
 
+class GalleryPaginationTest(TestCase):
+
+    urls = 'photologue.tests.test_urls'
+
+    def test_pagination(self):
+        for i in range(1, 23):
+            GalleryFactory(title='gallery{0:0>3}'.format(i))
+
+        response = self.client.get('/ptests/gallery/page/1/')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.context['object_list']),
+                         20)
+        # Check first and last items.
+        self.assertEqual(response.context['object_list'][0].title,
+                         'gallery022')
+        self.assertEqual(response.context['object_list'][19].title,
+                         'gallery003')
+
+        # Now get the second page of results.
+        response = self.client.get('/ptests/gallery/page/2/')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(len(response.context['object_list']),
+                         2)
+        # Check first and last items.
+        self.assertEqual(response.context['object_list'][0].title,
+                         'gallery002')
+        self.assertEqual(response.context['object_list'][1].title,
+                         'gallery001')

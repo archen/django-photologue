@@ -22,10 +22,6 @@ DATABASES = {
 
 TIME_ZONE = 'UTC'
 
-
-
-
-
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-gb'
@@ -111,9 +107,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'photologue',
     'imagekit',
-    'example_project',
     'south',
-    'imagekit',
     'example_project',
 ]
 

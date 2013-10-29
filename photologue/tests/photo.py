@@ -1,22 +1,17 @@
 import os
+from unittest import skip
+
 from django.conf import settings
 from django.core.files.base import ContentFile
 from imagekit.cachefiles import ImageCacheFile
-from photologue.models import Image, Photo, PHOTOLOGUE_DIR
+
+from ..models import Image, Photo, PHOTOLOGUE_DIR
+from .factories import LANDSCAPE_IMAGE_PATH, QUOTING_IMAGE_PATH
+from .helpers import PhotologueBaseTest
 from photologue.processors import PhotologueSpec
-from photologue.tests.helpers import LANDSCAPE_IMAGE_PATH, PhotologueBaseTest, \
-QUOTING_IMAGE_PATH
-from unittest import skip
 
 
 class PhotoTest(PhotologueBaseTest):
-    def tearDown(self):
-        """Delete any extra test files (if created)."""
-        super(PhotoTest, self).tearDown()
-        try:
-            self.pl2.delete()
-        except:
-            pass
 
     def test_new_photo(self):
         self.assertEqual(Photo.objects.count(), 1)
@@ -24,15 +19,12 @@ class PhotoTest(PhotologueBaseTest):
         self.assertEqual(os.path.getsize(self.pl.image.path),
                          os.path.getsize(LANDSCAPE_IMAGE_PATH))
 
-    #def test_exif(self):
-    #    self.assertTrue(len(self.pl.EXIF.keys()) > 0)
-
     def test_paths(self):
         self.assertEqual(os.path.normpath(str(self.pl.cache_path())).lower(),
                          os.path.normpath(os.path.join(settings.MEDIA_ROOT,
-                                      PHOTOLOGUE_DIR,
-                                      'photos',
-                                      'cache')).lower())
+                                                       PHOTOLOGUE_DIR,
+                                                       'photos',
+                                                       'cache')).lower())
         self.assertEqual(self.pl.cache_url(),
                          settings.MEDIA_URL + PHOTOLOGUE_DIR + '/photos/cache')
 
@@ -71,7 +63,6 @@ class PhotoTest(PhotologueBaseTest):
         self.assertEqual(self.pl.get_testPhotoSize_url(),
                          cache.url)
 
-
     def test_accessor_methods_filename(self):
         generator = PhotologueSpec(photo=self.pl, photosize=self.s)
         cache = ImageCacheFile(generator)
@@ -90,17 +81,13 @@ class PhotoTest(PhotologueBaseTest):
 
         # Now create a Photo with a name that needs quoting.
         self.pl2 = Photo(title='test', title_slug='test')
-        self.pl2.image.save(os.path.basename(QUOTING_IMAGE_PATH),
-                           ContentFile(open(QUOTING_IMAGE_PATH, 'rb').read()))
+        self.pl2.image.save(
+            os.path.basename(QUOTING_IMAGE_PATH),
+            ContentFile(open(QUOTING_IMAGE_PATH, 'rb').read())
+        )
         self.pl2.save()
 
         generator = PhotologueSpec(photo=self.pl2, photosize=self.s)
         cache = ImageCacheFile(generator)
         self.assertEqual(self.pl2.get_testPhotoSize_url(),
                          cache.url)
-
-
-
-
-
-

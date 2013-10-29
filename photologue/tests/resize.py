@@ -1,33 +1,27 @@
-# -*- coding: utf-8 -*-
-import os, unittest
-from django.core.files.base import ContentFile
+import unittest
 from django.core.exceptions import ValidationError
-from photologue.models import Photo, PhotoSizeCache, PhotoSize
-from photologue.tests.helpers import PhotologueBaseTest, SQUARE_IMAGE_PATH, PORTRAIT_IMAGE_PATH
+from ..models import PhotoSizeCache, PhotoSize
+from .helpers import PhotologueBaseTest
+from .factories import SQUARE_IMAGE_PATH, PORTRAIT_IMAGE_PATH, PhotoFactory
+
 
 class PhotoSizeTest(unittest.TestCase):
+
     def test_clean_wont_allow_zero_dimension_and_crop(self):
         """Tests if ValidationError is raised by clean method if with or height
         is set to 0 and crop is set to true"""
         s = PhotoSize(name='test', width=400, crop=True)
         self.assertRaises(ValidationError, s.clean)
-        
+
 
 class ImageResizeTest(PhotologueBaseTest):
+
     def setUp(self):
         super(ImageResizeTest, self).setUp()
-        self.pp = Photo(title='portrait',
-            title_slug='portrait'
-        )
-        self.pp.image.save(os.path.basename(PORTRAIT_IMAGE_PATH),
-                           ContentFile(open(PORTRAIT_IMAGE_PATH, 'rb').read()))
-        self.pp.save()
-        self.ps = Photo(title='square',
-            title_slug='square',
-        )
-        self.ps.image.save(os.path.basename(SQUARE_IMAGE_PATH),
-                           ContentFile(open(SQUARE_IMAGE_PATH, 'rb').read()))
-        self.ps.save()
+        # Portrait.
+        self.pp = PhotoFactory(image__from_path=PORTRAIT_IMAGE_PATH)
+        # Square.
+        self.ps = PhotoFactory(image__from_path=SQUARE_IMAGE_PATH)
 
     def tearDown(self):
         super(ImageResizeTest, self).tearDown()
@@ -133,7 +127,7 @@ class ImageResizeTest(PhotologueBaseTest):
 
 
 class PhotoSizeCacheTest(PhotologueBaseTest):
+
     def test(self):
         cache = PhotoSizeCache()
         self.assertEqual(cache.sizes['testPhotoSize'], self.s)
-
