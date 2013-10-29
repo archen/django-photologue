@@ -6,11 +6,7 @@ Photologue
     :target: https://travis-ci.org/petry/django-photologue
     :alt: CI status on Travis CI
 
-.. image:: https://codeq.io/github/petry/django-photologue/badges/master.png
-    :target: https://codeq.io/github/petry/django-photologue/branches/master
-    :alt: Quality score on Codeq
-
-.. image:: https://coveralls.io/repos/petry/django-photologue/badge.png?branch=master 
+.. image:: https://coveralls.io/repos/petry/django-photologue/badge.png?branch=master
     :target: https://coveralls.io/r/petry/django-photologue
     :alt: Coverage Status
 

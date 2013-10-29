@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from imagekit.cachefiles import ImageCacheFile
 
 from ..models import Image, Photo, PHOTOLOGUE_DIR
-from .factories import LANDSCAPE_IMAGE_PATH, QUOTING_IMAGE_PATH
+from .factories import LANDSCAPE_IMAGE_PATH, QUOTING_IMAGE_PATH, PhotoFactory
 from .helpers import PhotologueBaseTest
 from photologue.processors import PhotologueSpec
 
@@ -18,6 +18,14 @@ class PhotoTest(PhotologueBaseTest):
         self.assertTrue(os.path.isfile(self.pl.image.path))
         self.assertEqual(os.path.getsize(self.pl.image.path),
                          os.path.getsize(LANDSCAPE_IMAGE_PATH))
+
+    def test_remove_photo_file(self):
+        photo = PhotoFactory(title='New Photo', title_slug='newphoto')
+        image_path = photo.image.path
+        self.assertTrue(os.path.isfile(image_path))
+        photo.delete()
+        self.assertFalse(os.path.isfile(image_path))
+
 
     def test_paths(self):
         self.assertEqual(os.path.normpath(str(self.pl.cache_path())).lower(),

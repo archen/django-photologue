@@ -10,12 +10,13 @@
 <div class="results">
     {% for c in cl.result_list %}
     <div class="photo module">
-        <a href="{{ c.pk }}">
+        <a href="{{ c.pk }}/">
             <img src="{{ c.get_admin_thumbnail_url }}" alt="{{ c.title }}"/>
         </a>
 
         <div class="photo-label">
-            <a href="{{ c.pk }}">
+            <input class="action-select" name="_selected_action" type="checkbox" value="{{ c.pk }}">
+            <a href="{{ c.pk }}/">
                 {{ c.title }}
             </a>
         </div>

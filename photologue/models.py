@@ -319,7 +319,6 @@ class GalleryUpload(models.Model):
             zip.close()
             return gallery
 
-
 class ImageModel(models.Model):
     image = models.ImageField(_('image'),
                               max_length=IMAGE_FIELD_MAX_LENGTH,
@@ -447,17 +446,6 @@ class ImageModel(models.Model):
 
     def save(self, *args, **kwargs):
         if self.date_taken is None:
-            try:
-                exif_date = self.EXIF.get('EXIF DateTimeOriginal', None)
-                if exif_date is not None:
-                    d, t = str.split(exif_date.values)
-                    year, month, day = d.split(':')
-                    hour, minute, second = t.split(':')
-                    self.date_taken = datetime(int(year), int(month), int(day),
-                                               int(hour), int(minute), int(second))
-            except:
-                pass
-        if self.date_taken is None:
             self.date_taken = now()
         if self._get_pk_val():
             self.clear_cache()
@@ -473,7 +461,7 @@ class ImageModel(models.Model):
         # http://haineault.com/blog/147/
         # The data loss scenarios mentioned in the docs hopefully do not apply
         # to Photologue!
-        self.image.storage.delete(self.image)
+        self.image.storage.delete(self.image.name)
         super(ImageModel, self).delete()
 
 
