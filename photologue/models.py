@@ -412,7 +412,7 @@ class ImageModel(models.Model):
         # http://haineault.com/blog/147/
         # The data loss scenarios mentioned in the docs hopefully do not apply
         # to Photologue!
-        self.image.storage.delete(self.image)
+        self.image.storage.delete(self.image.name)
         super(ImageModel, self).delete()
 
 
