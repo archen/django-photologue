@@ -6,17 +6,10 @@ from django.utils.unittest.case import skip
 from photologue.models import Image, Photo, PHOTOLOGUE_DIR
 from photologue.processors import PhotologueSpec
 from photologue.tests.helpers import LANDSCAPE_IMAGE_PATH, PhotologueBaseTest, \
-QUOTING_IMAGE_PATH
+QUOTING_IMAGE_PATH, _create_new_photo
 
 
 class PhotoTest(PhotologueBaseTest):
-    def tearDown(self):
-        """Delete any extra test files (if created)."""
-        super(PhotoTest, self).tearDown()
-        try:
-            self.pl2.delete()
-        except:
-            pass
 
     def test_new_photo(self):
         self.assertEqual(Photo.objects.count(), 1)
@@ -24,8 +17,13 @@ class PhotoTest(PhotologueBaseTest):
         self.assertEqual(os.path.getsize(self.pl.image.path),
                          os.path.getsize(LANDSCAPE_IMAGE_PATH))
 
-    #def test_exif(self):
-    #    self.assertTrue(len(self.pl.EXIF.keys()) > 0)
+    def test_remove_photo_file(self):
+        photo = _create_new_photo(name='New Photo', slug='newphoto')
+        image_path = photo.image.path
+        self.assertTrue(os.path.isfile(image_path))
+        photo.delete()
+        self.assertFalse(os.path.isfile(image_path))
+
 
     def test_paths(self):
         self.assertEqual(os.path.normpath(str(self.pl.cache_path())).lower(),
