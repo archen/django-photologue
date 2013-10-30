@@ -4,7 +4,6 @@ import urlparse
 import zipfile
 import logging
 
-from datetime import datetime
 from inspect import isclass
 
 from django.utils.timezone import now
@@ -23,7 +22,6 @@ try:
 except ImportError:
     # Django < 1.4.2
     from django.utils.encoding import force_unicode as force_text
-from django.utils.encoding import smart_str
 from django.utils.functional import curry
 from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
@@ -66,8 +64,6 @@ except ImportError:
     from south.modelsinspector import add_introspection_rules
     add_introspection_rules([], ["^photologue\.models\.TagField"])
 
-from .utils import EXIF
-from .utils.reflection import add_reflection
 from .utils.watermark import apply_watermark
 
 
@@ -343,16 +339,6 @@ class ImageModel(models.Model):
 
     class Meta:
         abstract = True
-
-    @property
-    def EXIF(self):
-        try:
-            return EXIF.process_file(open(self.image.path, 'rb'))
-        except:
-            try:
-                return EXIF.process_file(open(self.image.path, 'rb'), details=False)
-            except:
-                return {}
 
     def admin_thumbnail(self):
         func = getattr(self, 'get_admin_thumbnail_url', None)
@@ -645,8 +631,6 @@ class PhotoEffect(BaseEffect):
         return im
 
     def post_process(self, im):
-        if self.reflection_size != 0.0:
-            im = add_reflection(im, bgcolor=self.background_color, amount=self.reflection_size, opacity=self.reflection_strength)
         return im
 
 
