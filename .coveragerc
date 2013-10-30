@@ -1,3 +1,5 @@
 [run]
+omit =
+    photologue/migrations*
 source = 
     photologue

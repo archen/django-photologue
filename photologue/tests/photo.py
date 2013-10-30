@@ -76,26 +76,3 @@ class PhotoTest(PhotologueBaseTest):
         cache = ImageCacheFile(generator)
         self.assertEqual(self.pl.get_testPhotoSize_filename(), cache.file.name)
 
-    @skip('')
-    def test_quoted_url(self):
-        """Test for issue #29 - filenames of photos are incorrectly quoted when
-        building a URL."""
-        generator = PhotologueSpec(photo=self.pl, photosize=self.s)
-        cache = ImageCacheFile(generator)
-
-        # Check that a 'normal' path works ok.
-        self.assertEqual(self.pl.get_testPhotoSize_url(),
-                         cache.url)
-
-        # Now create a Photo with a name that needs quoting.
-        self.pl2 = Photo(title='test', title_slug='test')
-        self.pl2.image.save(
-            os.path.basename(QUOTING_IMAGE_PATH),
-            ContentFile(open(QUOTING_IMAGE_PATH, 'rb').read())
-        )
-        self.pl2.save()
-
-        generator = PhotologueSpec(photo=self.pl2, photosize=self.s)
-        cache = ImageCacheFile(generator)
-        self.assertEqual(self.pl2.get_testPhotoSize_url(),
-                         cache.url)
