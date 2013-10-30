@@ -1,5 +1,5 @@
 import os
-from unittest import skip
+from django.utils.unittest.case import skip
 
 from django.conf import settings
 from django.core.files.base import ContentFile
