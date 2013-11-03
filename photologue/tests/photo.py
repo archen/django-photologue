@@ -1,12 +1,10 @@
 import os
-from django.utils.unittest.case import skip
 
 from django.conf import settings
-from django.core.files.base import ContentFile
 from imagekit.cachefiles import ImageCacheFile
 
 from ..models import Image, Photo, PHOTOLOGUE_DIR
-from .factories import LANDSCAPE_IMAGE_PATH, QUOTING_IMAGE_PATH, PhotoFactory
+from .factories import LANDSCAPE_IMAGE_PATH, PhotoFactory
 from .helpers import PhotologueBaseTest
 from photologue.processors import PhotologueSpec
 
