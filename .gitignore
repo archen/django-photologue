@@ -5,3 +5,4 @@ build
 .idea
 .coverage
 htmlcov/
+example_project/database.sql3

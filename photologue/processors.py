@@ -18,7 +18,8 @@ CROP_ANCHOR_OPTIONS = {
     'right': 'r',
     'bottom': 'b',
     'left': 'l',
-    'center': 'c'
+    'center': 'c',
+    'auto': 'auto'
 }
 
 
@@ -87,7 +88,6 @@ class PhotologueSpec(ImageSpec):
             photosize.width = None
         if photosize.height == 0:
             photosize.height = None
-
         self.processors.append(
             ThumbnailProcessor(
                 width=photosize.width,
