@@ -1,6 +1,6 @@
 import os
 import random
-import urlparse
+from urllib.parse import urlparse
 import zipfile
 import logging
 
