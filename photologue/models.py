@@ -1,6 +1,6 @@
 import os
 import random
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 import zipfile
 import logging
 
@@ -276,7 +276,7 @@ class GalleryUpload(models.Model):
                                              description=self.description,
                                              is_public=self.is_public,
                                              tags=self.tags)
-        from cStringIO import StringIO
+        from io import StringIO
         for filename in sorted(zip.namelist()):
             if filename.startswith('__'): # do not process meta files
                 continue
@@ -379,7 +379,7 @@ class ImageModel(models.Model):
         if photosize.increment_count:
             self.increment_count()
         generator = PhotologueSpec(photo=self, photosize=photosize)
-        image_url = urlparse.urljoin(settings.MEDIA_URL, generator.cachefile_name)
+        image_url = urljoin(settings.MEDIA_URL, generator.cachefile_name)
         return image_url
 
     def _get_SIZE_filename(self, size):
