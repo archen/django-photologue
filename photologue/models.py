@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
-from django.utils.six.moves.urlparse import urljoin
+from django.utils.six.moves import urllib
 
 from photologue.processors import PhotologueSpec
 
@@ -379,7 +379,7 @@ class ImageModel(models.Model):
         if photosize.increment_count:
             self.increment_count()
         generator = PhotologueSpec(photo=self, photosize=photosize)
-        image_url = urljoin(settings.MEDIA_URL, generator.cachefile_name)
+        image_url = urllib.parse.urljoin(settings.MEDIA_URL, generator.cachefile_name)
         return image_url
 
     def _get_SIZE_filename(self, size):
