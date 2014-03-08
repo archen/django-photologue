@@ -13,7 +13,7 @@ from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
-from django.utils.six.moves.urllib.parse import urljoin
+from django.utils.six.moves.urlparse import urljoin
 
 from photologue.processors import PhotologueSpec
 
